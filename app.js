@@ -54,6 +54,13 @@ app.use("/api/auth", authRouter);
 app.use("/api/articles", artRouter);
 app.use("/api/user", userRouter)
 
+
+if (process.env.NODE_ENV === "production") {
+  app.use("*", (req, res, next) => {
+    // If no routes match, send them the React HTML.
+    res.sendFile(__dirname + "/public/index.html");
+  });
+}
 // 404 Middleware
 app.use((req, res, next) => {
   const error = new Error("Ressource not found.");
@@ -75,5 +82,7 @@ app.use((err, req, res, next) => {
     res.json(err);
   }
 });
+
+
 
 module.exports = app;
